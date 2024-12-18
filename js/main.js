@@ -1,10 +1,14 @@
 var gBoard
+
  var gLevel = { 
     SIZE: 4, 
+   
     MINES: 2 
 }
+
 var gGame
 
+var gtimer
 const LIGHTBULB = '💡'
 const CROSS = '❌'
 
@@ -17,7 +21,8 @@ function init(){
         secsPassed: 0,
         firstClick:true , 
         hintMode:false , 
-        hints:3
+        hints:3,
+        safeClicks:3
     } 
     gBoard = createBoard()
    
@@ -25,6 +30,8 @@ function init(){
     renderBoard(gBoard)
     mineClicked()
     renderHints()
+    time()
+    upadteSafe()
    
 }
 
@@ -38,7 +45,8 @@ function createBoard(){
             var cell =  {minesAroundCount: 0, 
             isShown: false, 
             isMine: false, 
-            isMarked: false
+            isMarked: false,
+            isSafe:false
             }
             board[i][j] = cell
         }
@@ -106,10 +114,14 @@ function onCellClicked(elCell, i, j){
         firstClick({i,j})
     }
     if(gGame.hintMode){
-        console.log('aaaaa')
+       
         reveal({i,j},gBoard)
         renderHints()
         return
+    } 
+    if(gBoard[i][j].isSafe){
+        gGame.safeClicks--
+        upadteSafe()
     } 
     if(gBoard[i][j].isShown) return
     gGame.shownCount++
@@ -117,7 +129,8 @@ function onCellClicked(elCell, i, j){
     if(gBoard[i][j].isMine){
         gGame.shownCount--
         gBoard[i][j].isShown = false
-        elCell.innerHTML = '💣' 
+        elCell.innerHTML = '💣'
+        if(gBoard[i][j].isSafe) return 
         mineClicked()
         return
     } else if(gBoard[i][j].minesAroundCount === 0)
@@ -134,7 +147,7 @@ function onCellClicked(elCell, i, j){
           }else elCell.innerHTML =  gBoard[i][j].minesAroundCount
         elCell.className = "cell show"
         checkGameOver()
-      
+        
     
 
 }
@@ -169,7 +182,7 @@ function ranMines(numOfMines,notMine){
         }
     }
     for( var i=0;i<numOfMines;i++){
-        var num = getRandom(0,cells.length-1)
+        var num = getRandom(0,cells.length)
         gBoard[cells[num].i][cells[num].j].isMine = true
         cells.splice(num,1)
     }
@@ -186,7 +199,8 @@ function checkGameOver(){
        console.log('aaaa')
        var elRestart = document.querySelector('.restart')
         elRestart.innerHTML = '🏆'
-        gGame.isOn = false  
+        gGame.isOn = false 
+        clearInterval(gtimer) 
        
     }
 }
@@ -204,12 +218,14 @@ function expandShown(board, elCell, pos){
 
 }
  function firstClick(notMine){
+    gtimer = setInterval(time,1000)
     ranMines(gLevel.MINES,notMine)
     gGame.firstClick = false
     console.log('check')
 
  }
 function mineClicked(){
+    
     var elLives = document.querySelector('.lives')
     
     var strHTML= ''
@@ -223,6 +239,7 @@ function mineClicked(){
         var elRestart = document.querySelector('.restart')
         elRestart.innerHTML = '😔'
         gGame.isOn = false
+        clearInterval(gtimer) 
     }
     
 }
@@ -230,6 +247,7 @@ function mineClicked(){
 function restart(){
      var elRestart = document.querySelector('.restart')
         elRestart.innerHTML = '😀'
+        clearInterval(gtimer)
     init()
 }
 
@@ -296,3 +314,42 @@ function renderHints(){
     }
     elHints.innerHTML = strHTML
 }
+
+function time(){
+    
+    var eltimer  = document.querySelector('.timer')
+    eltimer.innerHTML = gGame.secsPassed
+    gGame.secsPassed++
+
+}
+
+function safeClick(){
+    if(gGame.safeClicks<1) return
+    var cells = []
+    for(var i =0;i<gBoard.length;i++){
+        for(var j=0;j<gBoard[i].length;j++){
+            if(!gBoard[i][j].isShown){
+                cells.push({i,j})
+            }
+        }
+    }
+    var num = getRandom(0,cells.length)
+   gBoard[cells[num].i][cells[num].j].isSafe = true
+   var elSafeCell = document.querySelector(`[data-i="${cells[num].i}"][data-j="${cells[num].j}"]`)
+   elSafeCell.style.backgroundColor = 'gold'
+    setTimeout(clearSafe,2000,elSafeCell,gBoard[cells[num].i][cells[num].j])
+}
+
+function clearSafe(elSafe,safecell){
+    if(safecell.isShown) elSafe.style.backgroundColor = '#DCDCDC'
+    else elSafe.style.backgroundColor = 'gray'
+    safecell.isSafe = false
+}
+
+
+
+function upadteSafe(){
+    var elSafe = document.querySelector('.safe-click')
+    elSafe.innerHTML = 'safe click <br> left: '+gGame.safeClicks
+}
+
