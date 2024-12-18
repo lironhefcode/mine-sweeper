@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>mine sweeper</title>
+		<link rel="stylesheet" href="css/style.css" />
+	</head>
+	
+	<body oncontextmenu="return false;" onload="init()">
+       <div class="restart" onclick="restart()">😀</div>
+		<table>
+			<tbody class="board"></tbody>
+		</table>
+		<div class="level">
+			<button onclick="changeSize(this)" data-size="4" data-mines="2">16</button>
+			<button onclick="changeSize(this)" data-size="8" data-mines="14">64</button>
+			<button onclick="changeSize(this)" data-size="12" data-mines="32">144</button>
+		</div>
+		<div class="lives">❤️❤️❤️</div>
+
+		
+		<script src="js/main.js"></script>
+	</body>
+</html>

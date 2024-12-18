@@ -1,0 +1,29 @@
+body {
+    background-color: #FFE4C4;
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
+    text-align: center;
+}
+
+table {
+    margin: 30px auto;
+}
+
+.cell {
+    background-color: gray;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+}
+.lives{
+    
+    font-size: 50px;
+}
+.restart{
+    font-size: 35px;
+    margin-top: 100px;
+}
+.show{
+    background-color: #DCDCDC;
+    
+}
