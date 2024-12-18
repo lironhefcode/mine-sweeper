@@ -5,6 +5,8 @@ var gBoard
 }
 var gGame
 
+const LIGHTBULB = '💡'
+const CROSS = '❌'
 
 function init(){
      gGame = { 
@@ -13,13 +15,16 @@ function init(){
         shownCount: 0, 
         markedCount: 0, 
         secsPassed: 0,
-        firstClick:true    
+        firstClick:true , 
+        hintMode:false , 
+        hints:3
     } 
     gBoard = createBoard()
    
    
     renderBoard(gBoard)
     mineClicked()
+    renderHints()
    
 }
 
@@ -100,6 +105,12 @@ function onCellClicked(elCell, i, j){
         
         firstClick({i,j})
     }
+    if(gGame.hintMode){
+        console.log('aaaaa')
+        reveal({i,j},gBoard)
+        renderHints()
+        return
+    } 
     if(gBoard[i][j].isShown) return
     gGame.shownCount++
     gBoard[i][j].isShown = true
@@ -232,4 +243,56 @@ function changeSize(elButton){
     gLevel.MINES = +elButton.dataset.mines
     gLevel.SIZE = +elButton.dataset.size
     restart()
+}
+
+
+function hint(){
+   if(gGame.hints<1) return
+   gGame.hintMode = true
+}
+
+
+function reveal(pos,board){
+    gGame.hints--
+    gGame.hintMode = false
+    for(var i = pos.i-1;i<=pos.i+1;i++){
+        for(var j=pos.j-1;j<=pos.j+1;j++){
+            if (i < 0 || i >= gLevel.SIZE || j < 0 || j >= gLevel.SIZE) continue
+            
+			if (!board[i][j].isShown ) {
+                var elCell = document.querySelector(`[data-i="${i}"][data-j="${j}"]`)
+                if(board[i][j].isMine){
+                    elCell.innerHTML = '💣'
+                } else if(board[i][j].minesAroundCount !== 0){
+                    elCell.innerHTML = board[i][j].minesAroundCount
+                } else elCell.innerHTML = ''
+            }
+        }
+    }
+    setTimeout(hide,1000,pos,board)
+}
+
+function hide(pos,board){
+ 
+    for(var i = pos.i-1;i<=pos.i+1;i++){
+        for(var j=pos.j-1;j<=pos.j+1;j++){
+            if (i < 0 || i >= gLevel.SIZE || j < 0 || j >= gLevel.SIZE) continue
+            
+			if (!board[i][j].isShown ) {
+                var elCell = document.querySelector(`[data-i="${i}"][data-j="${j}"]`)
+                elCell.innerHTML = ''
+            }
+        }
+    }
+}
+
+function renderHints(){
+    var elHints = document.querySelector('.hint')
+    strHTML = ''
+    for(var i =0;i<3;i++){
+        if(i<gGame.hints){
+            strHTML += LIGHTBULB
+        } else strHTML += CROSS
+    }
+    elHints.innerHTML = strHTML
 }

@@ -7,6 +7,8 @@ body {
 
 table {
     margin: 30px auto;
+    margin-top: 10px;
+    
 }
 
 .cell {
@@ -21,9 +23,39 @@ table {
 }
 .restart{
     font-size: 35px;
-    margin-top: 100px;
+    margin-top: 10px;
 }
 .show{
     background-color: #DCDCDC;
     
 }
+.level {
+    position: absolute;
+    top: 60px;
+    right: 20px; 
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.level button {
+    margin-bottom: -7px;
+    padding: 10px; 
+    background-color: #FFF8DC; 
+    border-radius: 5px; 
+    width: 60px;
+   
+}
+.hint{
+    position: absolute;
+    top: 210px;
+    right: 20px; 
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding: 10px; 
+    background-color: #FFF8DC; 
+    border-radius: 5px; 
+
+}
+
