@@ -19,6 +19,7 @@ function init(){
    
    
     renderBoard(gBoard)
+    mineClicked()
    
 }
 
@@ -100,9 +101,10 @@ function onCellClicked(elCell, i, j){
         firstClick({i,j})
     }
     if(gBoard[i][j].isShown) return
-    gGame.shownCount += 1
+    gGame.shownCount++
     gBoard[i][j].isShown = true
     if(gBoard[i][j].isMine){
+        gGame.shownCount--
         gBoard[i][j].isShown = false
         elCell.innerHTML = '💣' 
         mineClicked()
