@@ -4,6 +4,9 @@
     --show:#DCDCDC;
     --buttons:#FFF8DC;
     --textColor:black;
+    --scoreboard:#FFFACD;
+    --bordercolor: #FFE4C4;
+                    
 }
 
 
@@ -31,6 +34,7 @@ table {
 .lives{
     
     font-size: 50px;
+ 
 }
 .restart{
     position: absolute;
@@ -59,7 +63,8 @@ table {
     margin-bottom: -7px;
     padding: 10px; 
     background-color: var(--buttons); 
-    border-radius: 5px; 
+    border-radius: 50px; 
+    border-color: var(--bordercolor);
     width: 60px;
     display: flex;
     flex-direction: column;
@@ -76,7 +81,8 @@ table {
     align-items: flex-end;
     padding: 10px; 
     background-color: var(--buttons); 
-    border-radius: 5px; 
+    border-radius: 50px; 
+    border-color: var(--bordercolor);
 
 }
 .timer{
@@ -98,8 +104,8 @@ table {
     align-items: flex-end;
     padding: 10px; 
     background-color: var(--buttons); 
-    border-radius: 5px; 
-   
+    border-radius: 50px; 
+    border-color: var(--bordercolor);
     font-family: fantasy;
 }
 .dark-mode{
@@ -113,8 +119,9 @@ table {
     align-items: flex-end;
     padding: 10px; 
     background-color: var(--buttons); 
-    border-radius: 5px; 
+    border-radius: 50px; 
     font-family: fantasy;
+    border-color: var(--bordercolor);
 
 }
 .custom-board{
@@ -127,8 +134,9 @@ table {
     align-items: flex-end;
     padding: 10px; 
     background-color: var(--buttons); 
-    border-radius: 5px; 
+    border-radius: 50px; 
     font-family: fantasy;
+    border-color: var(--bordercolor);
 
 }
 
@@ -141,8 +149,9 @@ table {
     align-items: flex-end;
     padding: 10px; 
     background-color: var(--buttons); 
-    border-radius: 5px; 
+    border-radius: 50px; 
     font-family: fantasy;
+    border-color: var(--bordercolor);
 }
 
 .mega-hint{
@@ -154,8 +163,9 @@ table {
     align-items: flex-end;
     padding: 10px; 
     background-color: var(--buttons); 
-    border-radius: 5px; 
+    border-radius: 50px; 
     font-family: fantasy;
+    border-color: var(--bordercolor);
 }
 
 .winner-name{
@@ -177,8 +187,9 @@ table {
     align-items: flex-end;
     padding: 10px; 
     background-color: var(--buttons); 
-    border-radius: 5px; 
+    border-radius: 50px; 
     font-family: fantasy;
+    border-color: var(--bordercolor);
 
 }
 .score-board{
@@ -187,6 +198,6 @@ table {
     position: absolute;
     left: 590px;
     width: 400px;
-    background-color: #FFFACD;
+    background-color: var(--scoreboard);
     
 }
