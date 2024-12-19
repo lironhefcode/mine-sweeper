@@ -3,7 +3,7 @@ var gBoard
 var gLevel = {
     SIZE: 4,
 
-    MINES: 3
+    MINES: 2
 }
 
 var gGame
@@ -13,9 +13,10 @@ const LIGHTBULB = '💡'
 const CROSS = '❌'
 var darkMode = false
 function init() {
+   
     gMoves = 
     gGame = {
-        lives: 4, // actualy is 3 get reduced by 1 when rendering 
+        lives: 3, 
         isOn: false,
         shownCount: 0,
         markedCount: 0,
@@ -239,7 +240,11 @@ function checkGameOver() {
         elRestart.innerHTML = '🏆'
         gGame.isOn = false
         clearInterval(gtimer)
-
+        var elWinner = document.querySelector('.winner-name')
+        var elTable =  document.querySelector('table')
+        elTable.style.opacity = 0
+        elWinner.style.opacity =1
+        elWinner.style.display = 'block'
     }
 }
 
@@ -267,7 +272,8 @@ function mineClicked() {
     var elLives = document.querySelector('.lives')
 
     var strHTML = ''
-    gGame.lives--
+    if(gGame.isOn)gGame.lives--
+    
     for (var i = 0; i < gGame.lives; i++) {
         strHTML += '❤️'
     }
@@ -431,7 +437,7 @@ function exterminator(){
         }
     }
     for(var i =0;i<3;i++){
-        debugger
+        
         var num = getRandom(0,mines.length)
         gBoard[mines[num].i][mines[num].j].isMine = false
         mines.splice(num,1)
@@ -517,5 +523,101 @@ function updateMines(){
     if(gGame.customBoard){
         elplaced.innerHTML = 'place mines: <br> left: ' + (gLevel.MINES - gGame.minePlaced)
     } else elplaced.innerHTML = 'custom Board'
+}
+
+
+
+
+function addScore(){
+
+    var nameValue  = document.querySelector('.input').value
+    var userInfo = {
+        name:nameValue,
+        level:gLevel.SIZE,
+        time:gGame.secsPassed
+    }
+    localStorage.setItem(localStorage.length,JSON.stringify(userInfo))
+    var elWinner = document.querySelector('.winner-name')
+    var elTable =  document.querySelector('table')
+    elTable.style.opacity = 1
+    elWinner.style.opacity =
+    elWinner.style.display = 'none'
+    document.querySelector('input').value = '' 
+}
+
+function scoreBoard(){
+    
+    var topIn16 = []
+    var topIn64 = []
+    var topIn144 = []
+    for(var i=0;i<localStorage.length;i++){
+        var player  = JSON.parse(localStorage.getItem(`${i}`))
+        
+        if(player.level ===4){
+            if(topIn16.length<3){
+                topIn16.push(player)
+            }else{
+                for(var j=0;j<3;j++){
+                    if(player.time<topIn16[j].time){
+                        topIn16.splice(j,1)
+                        topIn16.push(player)
+                    }
+                }
+            }
+
+        }
+         else if(player.level ===8){
+            if(topIn64.length<3){
+                topIn64.push({name:player.name,time:player.time})
+            }else{
+                for(var j=0;j<3;j++){
+                    if(player.time<topIn64[j].time){
+                        topIn64.splice(j,1)
+                        topIn64.push(player)
+                    }
+                }
+
+            }
+            
+        }else if(player.level ===12){
+            if(topIn144.length<3){
+                topIn144.push({name:player.name,time:player.time})
+            }else{
+                for(var j=0;j<3;j++){
+                    if(player.time<topIn144[j].time){
+                        topIn144.splice(j,1)
+                        topIn144.push(player)
+                    }
+            }
+
+        }
+    }
+
+    }
+
+    renderScoreBoard(topIn16,topIn64,topIn144)
+}
+
+
+function renderScoreBoard(top16,top64,top144){
+    var elScoreBoard =  document.querySelector('.score-board')
+    if(elScoreBoard.style.display==='block'){
+        elScoreBoard.style.display = 'none'
+        return
+    }
+    elScoreBoard.style.display='block'
+   var strHTML = '<h2><16/h2>\n'
+    var strRow16 = ''
+    var strRow64 = ''
+    var strRow144 = ''
+   for(var i=0;i<3;i++){
+    strRow16 += `player: ${top16[i].name} score: ${top16[i].time} <br> `
+    strRow64 += `player: ${top64[i].name} score: ${top64[i].time} <br>`
+    strRow144 += `player: ${top144[i].name} score: ${top144[i].time} <br>`
+   }
+   strHTML = '<h2>16</h2>\n' + strRow16 + '<h2>64</h2>\n'+ strRow64 +'<h2>144</h2>\n'+ strRow144
+ 
+   elScoreBoard.innerHTML = strHTML
+
 }
 
